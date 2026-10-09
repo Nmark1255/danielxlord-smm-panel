@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DanielXlord | SMM Panel</title>
+<style>
+:root {
+  --bg: #080808;
+  --panel: #111111;
+  --panel2: #171717;
+  --border: #292929;
+  --text: #f5f5f5;
+  --muted: #999999;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+button, input, select {
+  font: inherit;
+}
+button { cursor: pointer; }
+.layout {
+  display: grid;
+  grid-template-columns: 225px minmax(0,1fr);
+  min-height: 100vh;
+}
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 24px 15px;
+  display: flex;
+  flex-direction: column;
+  background: #090909;
+}
+.brand {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  padding: 5px 8px 28px;
+}
+.brand small {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.nav {
+  display: grid;
+  gap: 8px;
+}
+.nav button {
+  text-align: left;
+  padding: 13px 12px;
+  border: 1px solid transparent;
+  color: #c5c5c5;
+  background: transparent;
+  border-radius: 9px;
+}
+.nav button:hover, .nav button.active {
+  background: #f5f5f5;
+  color: #111;
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding: 24px 8px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+main { min-width: 0; }
+.topbar {
+  height: 76px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  gap: 12px;
+}
+.search {
+  max-width: 370px;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--panel2);
+  color: white;
+}
+.profile { font-size: 13px; text-align: right; }
+.profile span { color: var(--muted); font-size: 11px; }
+.content { padding: 24px; max-width: 1500px; margin: auto; }
+.hero {
+  padding: 30px;
+  min-height: 165px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #333;
+  border-radius: 15px;
+  background:
+    radial-gradient(ellipse at 90% 20%, #333 0, transparent 35%),
+    linear-gradient(120deg, #1b1b1b, #090909 75%);
+}
+.eyebrow {
+  font-size: 11px;
+  color: #aaa;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+.hero h1 { font-size: clamp(25px,4vw,39px); margin: 9px 0; }
+.hero p { color: #bbb; font-size: 13px; line-height: 1.7; }
+.hero-mark { font-size: 62px; opacity: .85; }
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap: 14px;
+  margin: 18px 0;
+}
+.card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px;
+  background: linear-gradient(145deg,#151515,#0d0d0d);
+  min-width: 0;
+}
+.stat-icon { font-size: 22px; }
+.label { color: var(--muted); font-size: 12px; margin-top: 14px; }
+.value { font-size: 25px; font-weight: bold; margin-top: 6px; }
+.small-note { color: #999; font-size: 11px; margin-top: 8px; }
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0,1.6fr) minmax(250px,1fr);
+  gap: 16px;
+}
+.section { margin-bottom: 16px; }
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.section-head h2 { font-size: 16px; margin: 0; }
+.muted { color: var(--muted); font-size: 12px; }
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 10px;
+}
+.service {
+  background: #0b0b0b;
+  border: 1px solid #292929;
+  padding: 16px 12px;
+  border-radius: 10px;
+}
+.service .symbol { font-size: 25px; }
+.service h3 { font-size: 14px; margin: 10px 0 5px; }
+.service p { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.btn {
+  display: inline-block;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #f5f5f5;
+  color: #111;
+  font-weight: bold;
+  font-size: 12px;
+  text-decoration: none;
+}
+.btn:hover { opacity: .85; }
+.btn.secondary { background: #181818; color: #eee; }
+.btn.full { width: 100%; margin-top: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #292929;
+}
+th { color: #999; font-weight: normal; }
+td { color: #ddd; }
+.status { font-size: 10px; color: #bbb; }
+.quick-list { display: grid; gap: 10px; }
+.quick {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #0b0b0b;
+  border: 1px solid #292929;
+  border-radius: 9px;
+  color: white;
+  text-align: left;
+}
+.quick .symbol { font-size: 22px; }
+.quick strong { font-size: 13px; }
+.quick small { display: block; color: #999; margin-top: 4px; }
+.page { display: none; }
+.page.active { display: block; }
+.form { display: grid; gap: 14px; max-width: 600px; }
+.form label { display: grid; gap: 7px; font-size: 13px; color: #ccc; }
+.form input, .form select {
+  width: 100%;
+  padding: 12px;
+  background: #080808;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+.notice {
+  padding: 12px;
+  border: 1px solid #333;
+  background: #171717;
+  border-radius: 8px;
+  color: #bbb;
+  font-size: 12px;
+  line-height: 1.7;
+}
+footer { text-align: center; color: #666; font-size: 11px; padding: 22px; }
+@media(max-width:900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { padding: 12px; border-right: 0; border-bottom: 1px solid var(--border); }
+  .brand { padding: 6px 5px 14px; }
+  .nav { display: flex; overflow-x: auto; gap: 6px; }
+  .nav button { white-space: nowrap; padding: 10px; font-size: 12px; }
+  .sidebar-footer { display: none; }
+  .topbar { height: 62px; padding: 0 15px; }
+  .content { padding: 15px; }
+  .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .columns { grid-template-columns: 1fr; }
+}
+@media(max-width:420px) {
+  .hero { padding: 20px; }
+  .hero-mark { font-size: 38px; }
+  .card { padding: 13px; }
+  .value { font-size: 21px; }
+  .service-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  table { font-size: 10px; }
+  th,td { padding: 9px 4px; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<aside class="sidebar">
+  <div class="brand">♛ DANIELXLORD<small>S M M &nbsp; P A N E L</small></div>
+
+  <nav class="nav">
+    <button class="active" data-page="dashboard">⌂ &nbsp; Dashboard</button>
+    <button data-page="neworder">🛒 &nbsp; New Order</button>
+    <button data-page="services">▤ &nbsp; Services</button>
+    <button data-page="orders">▣ &nbsp; Orders</button>
+    <button data-page="funds">▣ &nbsp; Add Funds</button>
+    <button data-page="wallet">◉ &nbsp; Wallet</button>
+    <button data-page="support">☏ &nbsp; Support</button>
+    <button data-page="settings">⚙ &nbsp; Settings</button>
+    <button data-page="account">♙ &nbsp; Login / Register</button>
+  </nav>
+
+  <div class="sidebar-footer">
+    ♛ DanielXlord SMM Panel<br>
+    Fast · Secure · Reliable<br><br>
+    © 2026 DanielXlord
+  </div>
+</aside>
+
+<main>
+  <header class="topbar">
+    <input class="search" id="search" placeholder="⌕  Search services...">
+    <div class="profile">DanielXlord<br><span>Demo Panel</span></div>
+  </header>
+
+  <div class="content">
+
+    <section class="page active" id="dashboard">
+      <div class="hero">
+        <div>
+          <div class="eyebrow">WELCOME TO YOUR PANEL</div>
+          <h1>DanielXlord.</h1>
+          <p>Your social media service dashboard.<br>Simple. Modern. Made for you.</p>
+          <button class="btn" data-go="services">Explore Services →</button>
+        </div>
+        <div class="hero-mark">♛</div>
+      </div>
+
+      <div class="stats">
+        <div class="card"><div class="stat-icon">▣</div><div class="label">Demo Balance</div><div class="value">₱0.00</div><div class="small-note">No real funds stored</div></div>
+        <div class="card"><div class="stat-icon">🛒</div><div class="label">Your Orders</div><div class="value" id="orderCount">0</div><div class="small-note">Demo orders only</div></div>
+        <div class="card"><div class="stat-icon">✓</div><div class="label">Completed</div><div class="value">0</div><div class="small-note">No live processing</div></div>
+        <div class="card"><div class="stat-icon">♙</div><div class="label">Account Status</div><div class="value" style="font-size:19px">Guest</div><div class="small-note">Demo mode</div></div>
+      </div>
+
+      <div class="columns">
+        <div>
+          <div class="card section">
+            <div class="section-head"><h2>Popular Services</h2><span class="muted">Explore</span></div>
+            <div class="service-grid">
+              <div class="service"><div class="symbol">◎</div><h3>Instagram</h3><p>Views, likes and engagement</p><button class="btn secondary full" data-go="services">View Services</button></div>
+              <div class="service"><div class="symbol">♪</div><h3>TikTok</h3><p>Video views and engagement</p><button class="btn secondary full" data-go="services">View Services</button></div>
+              <div class="service"><div class="symbol">▶</div><h3>YouTube</h3><p>Video and channel services</p><button class="btn secondary full" data-go="services">View Services</button></div>
+              <div class="service"><div class="symbol">f</div><h3>Facebook</h3><p>Page and post services</p><button class="btn secondary full" data-go="services">View Services</button></div>
+            </div>
+          </div>
+
+          <div class="card section">
+            <div class="section-head"><h2>Recent Orders</h2><button class="btn secondary" data-go="orders">View All</button></div>
+            <div style="overflow-x:auto">
+              <table><thead><tr><th>Service</th><th>Quantity</th><th>Status</th></tr></thead>
+              <tbody id="recentOrders"><tr><td colspan="3">No demo orders yet.</td></tr></tbody></table>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card section">
+            <div class="section-head"><h2>Quick Actions</h2></div>
+            <div class="quick-list">
+              <button class="quick" data-go="neworder"><span class="symbol">🛒</span><span><strong>New Order</strong><small>Create a demo order</small></span></button>
+              <button class="quick" data-go="funds"><span class="symbol">＋</span><span><strong>Add Funds</strong><small>View funding information</small></span></button>
+              <button class="quick" data-go="services"><span class="symbol">▤</span><span><strong>Services</strong><small>Browse available services</small></span></button>
+              <button class="quick" data-go="support"><span class="symbol">☏</span><span><strong>Support</strong><small>Get help</small></span></button>
+            </div>
+          </div>
+          <div class="card section">
+            <h2>Wallet</h2>
+            <div class="value">₱0.00</div>
+            <p class="muted">Demo balance only.</p>
+            <button class="btn full" data-go="wallet">View Wallet</button>
+          </div>
+          <div class="card">
+            <h2>Need Help?</h2>
+            <p class="muted">Visit the support page for help and questions.</p>
+            <button class="btn secondary full" data-go="support">Contact Support</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="services">
+      <div class="card section">
+        <div class="section-head"><h2>Services Catalog</h2><span class="muted">Demo catalog</span></div>
+        <p class="muted">Choose a category to explore the sample services below.</p>
+        <div class="service-grid" id="catalog">
+          <div class="service"><div class="symbol">◎</div><h3>Instagram Engagement</h3><p>Sample service · Not connected to a provider</p><button class="btn full" data-service="Instagram Engagement">Choose Service</button></div>
+          <div class="service"><div class="symbol">♪</div><h3>TikTok Video Views</h3><p>Sample service · Not connected to a provider</p><button class="btn full" data-service="TikTok Video Views">Choose Service</button></div>
+          <div class="service"><div class="symbol">▶</div><h3>YouTube Video Views</h3><p>Sample service · Not connected to a provider</p><button class="btn full" data-service="YouTube Video Views">Choose Service</button></div>
+          <div class="service"><div class="symbol">f</div><h3>Facebook Engagement</h3><p>Sample service · Not connected to a provider</p><button class="btn full" data-service="Facebook Engagement">Choose Service</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="neworder">
+      <div class="card section">
+        <div class="section-head"><h2>Create a Demo Order</h2></div>
+        <div class="notice">This form only saves a local demo order in your current browser. It does not submit anything to a real provider or charge money.</div>
+        <form class="form" id="orderForm" style="margin-top:20px">
+          <label>Choose Service
+            <select id="serviceSelect">
+              <option>Instagram Engagement</option>
+              <option>TikTok Video Views</option>
+              <option>YouTube Video Views</option>
+              <option>Facebook Engagement</option>
+            </select>
+          </label>
+          <label>Public Post or Profile URL
+            <input id="orderLink" type="url" placeholder="https://example.com/your-page" required>
+          </label>
+          <label>Quantity
+            <input id="quantity" type="number" min="1" max="100000" value="100" required>
+          </label>
+          <div class="notice">Estimated demo price: <strong id="estimate">₱0.00</strong><br>Sample rate: ₱10 per 1,000 units. This is not a real quote.</div>
+          <button class="btn" type="submit">Create Demo Order</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="orders">
+      <div class="card section">
+        <div class="section-head"><h2>Order History</h2><span class="muted">Stored in this browser only</span></div>
+        <div style="overflow-x:auto">
+          <table><thead><tr><th>ID</th><th>Service</th><th>Quantity</th><th>Status</th></tr></thead><tbody id="allOrders"><tr><td colspan="4">No demo orders yet.</td></tr></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="funds">
+      <div class="card section">
+        <h2>Add Funds</h2>
+        <p class="muted">Payment integration is not set up yet.</p>
+        <div class="notice">No payments will be collected on this demo page. Before accepting real funds, connect a secure backend and a legitimate payment provider. Never share your GCash MPIN or OTP with a website.</div>
+      </div>
+    </section>
+
+    <section class="page" id="wallet">
+      <div class="card section">
+        <h2>Wallet Overview</h2>
+        <div class="value">₱0.00</div>
+        <p class="muted">Your demo wallet does not hold real money.</p>
+        <div class="notice">Real balances require a protected server-side database and transaction records. Do not use browser-only balances for actual payments.</div>
+      </div>
+    </section>
+
+    <section class="page" id="support">
+      <div class="card section">
+        <h2>Support Center</h2>
+        <p class="muted">Send a demo support message.</p>
+        <form class="form" id="supportForm">
+          <label>Subject<input id="subject" maxlength="100" required placeholder="How can we help?"></label>
+          <label>Message<input id="message" maxlength="500" required placeholder="Describe your question"></label>
+          <button class="btn" type="submit">Preview Message</button>
+        </form>
+        <div id="supportResult" class="notice" style="display:none;margin-top:15px"></div>
+        <p class="muted">This form does not send messages to a real support team.</p>
+      </div>
+    </section>
+
+    <section class="page" id="settings">
+      <div class="card section">
+        <h2>Settings</h2>
+        <div class="notice">This demo does not have a real user profile or saved account settings yet.</div>
+        <p>Theme: Dark</p>
+        <p>Panel: DanielXlord SMM Panel</p>
+      </div>
+    </section>
+
+    <section class="page" id="account">
+      <div class="card section">
+        <h2>Login / Register</h2>
+        <div class="notice">Account creation is not enabled in this static demo. A real login system needs a backend, secure authentication, and a database. Do not enter a real password here.</div>
+        <p class="muted">We will connect secure accounts in a later step.</p>
+      </div>
+    </section>
+
+    <footer>DanielXlord SMM Panel · Demo Version · 2026</footer>
+  </div>
+</main>
+</div>
+
+<script>
+const pages = document.querySelectorAll('.page');
+const navButtons = document.querySelectorAll('[data-page]');
+const demoOrders = [];
+
+function showPage(id) {
+  pages.forEach(page => page.classList.toggle('active', page.id === id));
+  navButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.page === id));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+navButtons.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
+
+document.querySelectorAll('[data-go]').forEach(btn => {
+  btn.addEventListener('click', () => showPage(btn.dataset.go));
+});
+
+document.querySelectorAll('[data-service]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('serviceSelect').value = btn.dataset.service;
+    showPage('neworder');
+  });
+});
+
+const quantityInput = document.getElementById('quantity');
+const estimate = document.getElementById('estimate');
+
+function updateEstimate() {
+  const qty = Math.max(0, Number(quantityInput.value) || 0);
+  estimate.textContent = '₱' + (qty * 10 / 1000).toFixed(2);
+}
+quantityInput.addEventListener('input', updateEstimate);
+updateEstimate();
+
+function renderOrders() {
+  const recent = document.getElementById('recentOrders');
+  const all = document.getElementById('allOrders');
+  document.getElementById('orderCount').textContent = demoOrders.length;
+
+  if (!demoOrders.length) {
+    recent.innerHTML = '<tr><td colspan="3">No demo orders yet.</td></tr>';
+    all.innerHTML = '<tr><td colspan="4">No demo orders yet.</td></tr>';
+    return;
+  }
+
+  recent.innerHTML = demoOrders.slice(-4).reverse().map(o =>
+    `<tr><td>${o.service}</td><td>${o.quantity}</td><td class="status">Demo only</td></tr>`
+  ).join('');
+
+  all.innerHTML = demoOrders.slice().reverse().map(o =>
+    `<tr><td>${o.id}</td><td>${o.service}</td><td>${o.quantity}</td><td class="status">Demo only</td></tr>`
+  ).join('');
+}
+
+document.getElementById('orderForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const link = document.getElementById('orderLink').value.trim();
+
+  try {
+    const parsed = new URL(link);
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error();
+  } catch {
+    alert('Please enter a valid public URL starting with https://');
+    return;
+  }
+
+  demoOrders.push({
+    id: 'DEMO-' + String(demoOrders.length + 1).padStart(4, '0'),
+    service: document.getElementById('serviceSelect').value,
+    quantity: Number(quantityInput.value)
+  });
+
+  renderOrders();
+  alert('Demo order created! Nothing was sent to a provider and no money was charged.');
+  event.target.reset();
+  updateEstimate();
+  showPage('orders');
+});
+
+document.getElementById('supportForm').addEventListener('submit', event => {
+  event.preventDefault();
+  const subject = document.getElementById('subject').value.trim();
+  const message = document.getElementById('message').value.trim();
+  const result = document.getElementById('supportResult');
+  result.style.display = 'block';
+  result.textContent = 'Demo message preview — Subject: ' + subject + ' | Message: ' + message + '. This has not been sent.';
+});
+
+document.getElementById('search').addEventListener('input', event => {
+  const q = event.target.value.toLowerCase().trim();
+  if (!q) return;
+  const found = [...document.querySelectorAll('#catalog .service')].find(el =>
+    el.textContent.toLowerCase().includes(q)
+  );
+  if (found) {
+    showPage(
